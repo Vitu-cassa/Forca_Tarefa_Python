@@ -42,7 +42,7 @@ def eh_primo(n):
     return True
 
 # Nova função que encapsula todo o processo de geração de eventos
-def geraEventos(quantidade=1000):
+def geraEventos(quantidade=200):
     '''
     funçao gera uma quantidade de eventos semi-aleatorios para aplicar na coleçã,
     os valores de alguns indices variam de acordo com a validação de "i".
@@ -75,3 +75,52 @@ def geraEventos(quantidade=1000):
         eventos_gerados.append(evento)
         
     return eventos_gerados
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+eventos = geraEventos()
+print(eventos)
+# Conecta com o MongDB
+apagar = input("Quer remover coleções anteriores? [S]im/[N]ão ")
+
+# configurando conexão
+client = MongoClient("mongodb://localhost:27017/")
+db = client["seguranca"]
+eventos_db = db["eventos"]
+
+print(client.admin.command("ping"))
+print("Conectado ao Mongo!")
+
+if apagar == "S":
+    # Limpando coleções antigas no banco
+    print("Limpando todas as coleções antigas...")
+    try:
+        # Busca a lista com o nome de todas as coleções ativas no banco
+        for nome_colecao in db.list_collection_names():
+            # Exclui a coleção inteira
+            db[nome_colecao].drop()
+            print(f"Coleção '{nome_colecao}' removida com sucesso.")
+            
+        print("Banco de dados resetado com sucesso!")
+
+    except Exception as e:
+        print(f"Erro ao limpar o banco: {e}")
+
+# Adicionando eventos à coleção
+print("Inserindo novos eventos...")
+try:
+    eventos_db.insert_many(eventos)
+    print("{} novos logs catalogados.".format(eventos_db.count_documents({})))
+except Exception as e:
+    print("Falha na inserção: {}".format(e))
+
+# indexação para contagem
+print("Indexando...")
+try:
+    eventos_db.create_index("atualizado_em", expireAfterSeconds = 604800)
+    pipeline = [
+        {"$group": {"_id": {"$hour": "$atualizado_em"}, "total": {"$sum": 1}}}
+    ]
+    for linha in eventos_db.aggregate(pipeline):
+        print("{0[_id]} | {0[total]}".format(linha))
+except Exception as e:
+    print("Indexação falhou: {}".format(e))
