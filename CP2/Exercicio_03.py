@@ -26,6 +26,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from datetime import datetime, timedelta
 import random
+from time import sleep
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # Criando carga para coleção de eventos.
@@ -89,10 +90,13 @@ eventos_db = db["eventos"]
 
 print(client.admin.command("ping"))
 print("Conectado ao Mongo!")
+sleep(2)
 
 if apagar == "S":
     # Limpando coleções antigas no banco
     print("Limpando todas as coleções antigas...")
+    sleep(2)
+
     try:
         # Busca a lista com o nome de todas as coleções ativas no banco
         for nome_colecao in db.list_collection_names():
@@ -106,7 +110,7 @@ if apagar == "S":
         print(f"Erro ao limpar o banco: {e}")
 
 # Adicionando eventos à coleção
-print("Inserindo novos eventos...")
+print(f"\nInserindo novos eventos...")
 try:
     eventos_db.insert_many(eventos)
     print("{} novos logs catalogados.".format(eventos_db.count_documents({})))
@@ -115,12 +119,45 @@ except Exception as e:
 
 # indexação para contagem
 print("Indexando...")
+sleep(2)
 try:
     eventos_db.create_index("atualizado_em", expireAfterSeconds = 604800)
+    janela_tempo = datetime.now() - timedelta(hours=6)
     pipeline = [
-        {"$group": {"_id": {"$hour": "$atualizado_em"}, "total": {"$sum": 1}}}
+        {"$match": {"atualizado_em": {"$gte": janela_tempo}}},
+        {"$group": {"_id": {"$hour": "$atualizado_em"}, "total": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}
     ]
-    for linha in eventos_db.aggregate(pipeline):
-        print("{0[_id]} | {0[total]}".format(linha))
+
 except Exception as e:
     print("Indexação falhou: {}".format(e))
+
+print(f"\nOrganizando dados...")
+sleep(2)
+try:
+    resultados = list(eventos_db.aggregate(pipeline))
+    if resultados:
+        pico = max(resultados, key=lambda x:x['total'])
+        hora_pico = pico['_id']
+        total_pico = pico['total']
+
+        print(f"\n=== Falhas por hora (ultimas 24h) ===")
+        for linha in resultados:
+            hora = linha['_id']
+            total = linha['total']
+            hora_str = "{:02d}h".format(hora)
+            barra_grafico = ">" * total
+
+            if hora == hora_pico:
+                print("{} | {} {} <- pico".format(hora_str, barra_grafico, total))
+            else:
+                print("{} | {} {}".format(hora_str, barra_grafico, total))
+except Exception as e:
+    print("Falha na exibição dos eventos: {}".format(e))
+
+'''
+O TTL, além de aprimorar consultas em bancos extensos, e conservar espaço em disco,
+ajuda a eliminar registros que já possam ter sido resolvidos, ou até mesmo, irrelevantes,
+devido ao tempo, eliminando, nas analises, o risco de falsos positivos, e mantendo
+as ocorrencias atuais como relevantes.
+'''
