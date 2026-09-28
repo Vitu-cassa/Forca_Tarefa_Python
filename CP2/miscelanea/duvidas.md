@@ -40,7 +40,15 @@ Talvez ele queira dizer que as condições não devam ficar no programa principa
 1. Posso utilizar o gerador de eventos do CP anterior para fazer os eventos com datas aleatorias.
 2. Como devo conseguir fazer aquelas barrinhas gráficas?
 3. Estruturas de criação de coleções também reaproveitadas de outros exercicios. Ela importa, também outra pratica que eu deveria voltar a fazer, definição de funções especificas para ações especificas.
+4. Importante lembrar que, funções ou operações dentro do programa, podem, e deme, ser armazenadas em variaveis. Como a conta de `janela_tempo` durante o pipelina.
+5. A formatação da saida eu solicitei ajuda de IA, refatorando o código dela, verifiquei funções e tecnicas curiosas:
+> * Função `list()`, parece ter criado uma lista, sem declarar ela antes. Substituiu o `for` que eu estava fazendo a leitura do `.agrregate(pipeline)`, interessante.
+> * A sugestão de transformar o pipeline numa lista pareceu ajudar a manipular os dados melhor para a saida, resolvi tentar incorporar no código.
+> * Ele usou uma função `lambda`, preciso rever isso, pareceu muito útil.
 
+6. O programa funciona bem, porém, pode receber uma prova de conceito que os dados são eliminados após 60 segundos.
+
+**NOTA** Bastatne cois legal recebi da IA, manter em mente alguns dos truques.
 
 ---
 
