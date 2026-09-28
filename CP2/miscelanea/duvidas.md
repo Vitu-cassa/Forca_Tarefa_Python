@@ -39,6 +39,8 @@ Talvez ele queira dizer que as condições não devam ficar no programa principa
 
 1. Posso utilizar o gerador de eventos do CP anterior para fazer os eventos com datas aleatorias.
 2. Como devo conseguir fazer aquelas barrinhas gráficas?
+3. Estruturas de criação de coleções também reaproveitadas de outros exercicios. Ela importa, também outra pratica que eu deveria voltar a fazer, definição de funções especificas para ações especificas.
+
 
 ---
 
