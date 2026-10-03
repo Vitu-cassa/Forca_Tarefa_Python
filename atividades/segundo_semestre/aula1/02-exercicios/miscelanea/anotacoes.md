@@ -13,6 +13,3 @@
 2. Aparentemente, num script `.sql` o ponto e virgula são dedterminantes, também.
 
 ---
-
-## Exercicio 1.3:
-1. 
