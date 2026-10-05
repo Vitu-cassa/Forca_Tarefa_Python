@@ -41,3 +41,4 @@ for estimador in range(1, 250, 49):
     sleep(3)
     score = cross_val_score(pipeline, x, y, cv=5)
     print("estimador:{}\n Acurácia: {:.3f} (+/- {:.3f})".format(estimador, score.mean(), score.std()))
+
