@@ -41,6 +41,9 @@ A saída deste teste sempre resulta na mesma acuracia, independentemente dos est
 >  Acurácia: 1.000 (+/- 0.000)
 > ```
 >
-Não parece correto, verificar se os parâmetros indicados estão declarados corretamente.
+Não parece correto, verificar se os parâmetros indicados estão declarados corretamente. Este comportamento pode atrapalhar o processo de comparação, nos próximos exercicios.
 
 --- 
+
+## Exercicio 12.2
+1. 
