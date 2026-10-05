@@ -7,7 +7,6 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
 
-
 import numpy as np
 
 
@@ -34,6 +33,7 @@ modelos = {
     "SVM": SVC(),
     "KNN": KNeighborsClassifier(),
 }
+
 for nome, modelo in modelos.items():
     scores = cross_val_score(modelo, X, y, cv=5)
     print(f"{nome}: {scores.mean():.3f}")
