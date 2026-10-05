@@ -51,7 +51,7 @@ def _menu():
     '''
     Apresenta as opções na tela para usuario escolher.
     '''
-    print("Escolha uma das opçoes abaixo:")
+    print("Escolha_menu uma das opçoes abaixo:")
     print(
         "[1] cadastrar\n"
         "[2] listar\n"
@@ -90,7 +90,7 @@ def _main():
     '''
 
     _conexaoMongo()
-    escolha = 0
+    escolha_menu = 0
 
     while True:
         sleep(2)
@@ -98,26 +98,26 @@ def _main():
         _apresentacao()
         _menu()
 
-        escolha = input("Digite a opção desejada: ")
+        escolha_menu = input("Digite a opção desejada: ")
 
-        if escolha == "1":
+        if escolha_menu == "1":
             sleep(2)
-            print("Opção {} em construção!".format(escolha))
-        elif escolha == "2":
+            print("Opção {} em construção!".format(escolha_menu))
+        elif escolha_menu == "2":
             sleep(2)
-            print("Opção {} em construção!".format(escolha))
-        elif escolha == "3":
+            print("Opção {} em construção!".format(escolha_menu))
+        elif escolha_menu == "3":
             sleep(2)
-            print("Opção {} em construção!".format(escolha))
-        elif escolha == "4":
+            print("Opção {} em construção!".format(escolha_menu))
+        elif escolha_menu == "4":
             sleep(2)
-            print("Opção {} em construção!".format(escolha))
-        elif escolha == "5":
+            print("Opção {} em construção!".format(escolha_menu))
+        elif escolha_menu == "5":
             sleep(2)
-            print("Opção {} em construção!".format(escolha))
-        elif escolha == "6":
+            print("Opção {} em construção!".format(escolha_menu))
+        elif escolha_menu == "6":
             print("Opção {}\n"
-            "saindo da aplicação...".format(escolha))
+            "saindo da aplicação...".format(escolha_menu))
             sleep(2)
             break
         else:
