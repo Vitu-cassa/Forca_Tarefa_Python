@@ -41,9 +41,33 @@ A saída deste teste sempre resulta na mesma acuracia, independentemente dos est
 >  Acurácia: 1.000 (+/- 0.000)
 > ```
 >
-Não parece correto, verificar se os parâmetros indicados estão declarados corretamente. Este comportamento pode atrapalhar o processo de comparação, nos próximos exercicios.
+Não parece correto. Verificar se os parâmetros indicados pode ser uma saída. Este comportamento pode atrapalhar o processo de comparação, nos próximos exercicios.
+
+2. utilizando os parametros do exemplo, os valores passam a modificar. Talvez, delcarar `y` do modo como o exercicio pede, pode ser a causa de uma acuracia tão precisa e constante.
+> ```Python
+> estimador:1
+>  Acurácia: 0.785 (+/- 0.072)
+> estimador:50
+>  Acurácia: 0.875 (+/- 0.079)
+> estimador:99
+>  Acurácia: 0.890 (+/- 0.066)
+> estimador:148
+>  Acurácia: 0.890 (+/- 0.060)
+> estimador:197
+>  Acurácia: 0.895 (+/- 0.053)
+> estimador:246
+>  Acurácia: 0.905 (+/- 0.051)
+> ```
+> 
 
 --- 
 
 ## Exercicio 12.2
-1. 
+1. Como previsto, todos os modelos apresentam acuracia igual (1.00) no fim do processo.
+> ```Python
+> # Saida da comparação
+> RandomForest: 1.000
+> SVM: 1.000
+> KNN: 1.000
+> ```
+>
