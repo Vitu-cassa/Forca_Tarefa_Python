@@ -134,17 +134,65 @@ def _pesquisadorDeAtivos(colecao, ip):
                 "Nome: {:<15} | Tipo: {:<17} | Status: {}"
                 .format(ativo.get("nome"), ativo.get("tipo"), ativo.get("status"))
             )
+            return True
         else:
             print("\nIP não cadastrado!")
+            return False
     except Exception as e:
         print("Falha na consulta unitária: {}".format(e))
 
+def _atualizadorDeAtivos(colecao):
+    '''
+    Função atualiza um ativo do banco.
+    '''
+    ip = input("Indique o IP do ativo para atualiza: ")
+    ativo_existe = _pesquisadorDeAtivos(colecao, ip)
 
+    if ativo_existe:
+
+        print("Indique os novos campos do ativo: ")
+        novo_nome = str(input("Nome: "))
+        novo_tipo = str(input("Tipo: "))
+        novo_ip = str(input("ip: "))
+        novo_status = str(input("Status: "))
+        try:
+            colecao.update_one(
+                        {"ip": ip},
+                        {"$set":
+                            {
+                            "nome": novo_nome,
+                            "tipo": novo_tipo,
+                            "ip": novo_ip,
+                            "status": novo_status
+                            }
+                        }
+                    )
+            print("ativo atualizado!")
+
+        except Exception as e:
+            print("Falha na atualização: {}".format(e))
+
+def _removedorDeAtivos(colecao):
+    ip = input("Indique o IP do ativo para remover: ")
+    ativo_existe = _pesquisadorDeAtivos(colecao, ip)
+
+    if ativo_existe:
+
+        print("Removendo ativo...")
+        sleep(2)
+
+        try:
+            colecao.delete_one(
+                        {"ip": ip}
+                    )
+            print("ativo deletado!")
+
+        except Exception as e:
+            print("Falha na atualização: {}".format(e))
 def _main():
     '''
     Função principal.
     '''
-
     ativos, banco = _conexaoMongo()
     _criadorInicial(lista_ativos, ativos)
 
@@ -174,13 +222,14 @@ def _main():
             print("Buscando ativo...")
             sleep(2)
             _pesquisadorDeAtivos(ativos, ip)
+
         elif escolha_menu == "4":
             sleep(2)
-            print("Opção {} em construção!".format(escolha_menu))
+            _atualizadorDeAtivos(ativos)
 
         elif escolha_menu == "5":
             sleep(2)
-            print("Opção {} em construção!".format(escolha_menu))
+            _removedorDeAtivos(ativos)
 
         elif escolha_menu == "6":
             print(
