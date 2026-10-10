@@ -125,9 +125,21 @@ def _cadastradorDeAtivos(colecao):
     except Exception as e:
         print("Falha na atualização da coleção: {}".format(e))
 
-def _pesquisadorDeAtivos(colecao):
-    print()
-    
+def _pesquisadorDeAtivos(colecao, ip):
+    try:
+        ativo = colecao.find_one({"ip": ip})
+        if ativo:
+            print("\n"
+                "Ativo encontrado:\n"
+                "Nome: {:<15} | Tipo: {:<17} | Status: {}"
+                .format(ativo.get("nome"), ativo.get("tipo"), ativo.get("status"))
+            )
+        else:
+            print("\nIP não cadastrado!")
+    except Exception as e:
+        print("Falha na consulta unitária: {}".format(e))
+
+
 def _main():
     '''
     Função principal.
@@ -158,9 +170,10 @@ def _main():
             _listadorDeAtivos(ativos)
 
         elif escolha_menu == "3":
+            ip = input("Indique o IP do ativo: ")
+            print("Buscando ativo...")
             sleep(2)
-            print("Opção {} em construção!".format(escolha_menu))
-
+            _pesquisadorDeAtivos(ativos, ip)
         elif escolha_menu == "4":
             sleep(2)
             print("Opção {} em construção!".format(escolha_menu))
