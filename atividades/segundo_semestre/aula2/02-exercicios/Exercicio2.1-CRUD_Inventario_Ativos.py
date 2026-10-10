@@ -33,8 +33,6 @@ lista_ativos = [
 '''
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 from pymongo import MongoClient
-from datetime import datetime
-from datetime import datetime, timedelta
 from time import sleep
 
 def _apresentacao():
@@ -62,7 +60,24 @@ def _menu():
         "[6] Sair\n"
     )
 
-def _conexaoMongo(lista):
+def _criadorInicial(lista, ativos):
+    try:
+        ativos.insert_many(lista)
+    except Exception as e:
+        print("Falha na inserção: {}".format(e))
+
+def _deletadorTotal(db):
+    try:
+        # Busca a lista com o nome de todas as coleções ativas no banco
+        for nome_colecao in db.list_collection_names():
+            # Exclui a coleção inteira
+            db[nome_colecao].drop()
+            print(f"Coleção '{nome_colecao}' removida com sucesso.")
+
+    except Exception as e:
+        print(f"Erro ao limpar o banco: {e}")
+
+def _conexaoMongo():
     '''
     Realiza conexao com o banco para criar coleção.
     '''
@@ -81,13 +96,7 @@ def _conexaoMongo(lista):
         ativos = db["ativos"]
     except Exception as e:
         print("Falha na conexão com o banco: {}".format(e))
-    finally:
-        print("Preenchendo coleção...")
-        try:
-            ativos.insert_many(lista)
-        except Exception as e:
-            print("Falha na inserção: {}".format(e))
-    return ativos
+    return ativos, db
 
 def _listadorDeAtivos(colecao):
     '''
@@ -95,33 +104,37 @@ def _listadorDeAtivos(colecao):
     '''
     try:
         for ativo in colecao.find({"ip": {"$exists": True}}):
-            print("Nome: {:<10} | IP: {}".format(ativo.get("nome"), ativo.get("ip")))
+            print("Nome: {:<15} | IP: {:<17} | Status: {}".format(ativo.get("nome"), ativo.get("ip"), ativo.get("status")))
     except Exception as e:
         print("Falha na consulta multipla: {}".format(e))
 
+def _cadastradorDeAtivos(colecao):
+    '''
+    Realiza o cadastro de um novo ativo ao banco.
+    '''
+    ativo = {}
+    try:
+        ativo["nome"] = str(input("Nome: "))
+        ativo["tipo"] = str(input("Tipo: "))
+        ativo["ip"]= str(input("ip: "))
+        ativo["status"]= str(input("Status: "))
+
+        res = colecao.insert_one(ativo)
+        print(res.inserted_id)
+
+    except Exception as e:
+        print("Falha na atualização da coleção: {}".format(e))
+
+def _pesquisadorDeAtivos(colecao):
+    print()
+    
 def _main():
     '''
     Função principal.
     '''
 
-    ativos = _conexaoMongo(lista_ativos)
-    # client = MongoClient("mongodb://localhost:27017/")
-    # # Testa coenxão
-    # client.admin.command("ping")
-    # print("\nConectado ao MongoDB!")
-    # sleep(0.5)
-
-    # print("Preparando banco...")
-    # db = client["seguranca"]
-    # sleep(1)
-
-    # print("Criando coleção...\n")
-    # ativos = db["ativos"]
-
-    # try:
-    #     ativos.insert_many(lista_ativos)
-    # except Exception as e:
-    #     print("Falha na inserção: {}".format(e))
+    ativos, banco = _conexaoMongo()
+    _criadorInicial(lista_ativos, ativos)
 
     escolha_menu = 0
 
@@ -134,26 +147,41 @@ def _main():
         escolha_menu = input("Digite a opção desejada: ")
 
         if escolha_menu == "1":
+            print("Indique os dados do ativo:")
             sleep(2)
+            _cadastradorDeAtivos(ativos)
+
         elif escolha_menu == "2":
             print("Consultando ativos cadastrados...")
             sleep(2)
             print("Opção {} em construção!".format(escolha_menu))
             _listadorDeAtivos(ativos)
+
         elif escolha_menu == "3":
             sleep(2)
             print("Opção {} em construção!".format(escolha_menu))
+
         elif escolha_menu == "4":
             sleep(2)
             print("Opção {} em construção!".format(escolha_menu))
+
         elif escolha_menu == "5":
             sleep(2)
             print("Opção {} em construção!".format(escolha_menu))
+
         elif escolha_menu == "6":
-            print("Opção {}\n"
-            "saindo da aplicação...".format(escolha_menu))
-            sleep(2)
+            print(
+                "Opção {}\n"
+                "deseja deletar o banco? [S]im / [N]ão".format(escolha_menu))
+            apagar = input("Digite sua escolha: ")
+            if apagar == "S":
+                sleep(2)
+                print("Deletando banco...")
+                _deletadorTotal(banco)
+            else:
+                print("Dados mantidos para novos testes.")
             break
+
         else:
             sleep(2)
             print("Opção inválida, faça uma sugestão ao dev!")
@@ -162,4 +190,7 @@ _main()
 
 # !!!!!!!!!! Aera dev !!!!!!!!!!
 
-# ativos = _conexaoMongo(lista_ativos)
+# ativos, banco = _conexaoMongo()
+# _criadorInicial(lista_ativos, ativos)
+
+# _listadorDeAtivos(ativos)
