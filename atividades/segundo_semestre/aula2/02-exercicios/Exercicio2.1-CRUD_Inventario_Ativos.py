@@ -1,4 +1,4 @@
-ativos = [
+lista_ativos = [
     {"nome": "SRV-WEB01", "tipo": "servidor", "ip": "192.168.1.10", "status": "ativo"},
     {"nome": "PC-RH03",   "tipo": "estacao",  "ip": "192.168.1.45", "status": "ativo"},
     {"nome": "SW-CORE01", "tipo": "switch",   "ip": "192.168.1.1",  "status": "inativo"},
@@ -35,13 +35,14 @@ ativos = [
 from pymongo import MongoClient
 from datetime import datetime
 from datetime import datetime, timedelta
-import random
 from time import sleep
 
 def _apresentacao():
     '''
     Cabeçalho do exercicio.
     '''
+    
+    print()
     print("+------------------------+")
     print("| Gerenciador de ativos  |")
     print("+------------------------+")
@@ -51,7 +52,7 @@ def _menu():
     '''
     Apresenta as opções na tela para usuario escolher.
     '''
-    print("Escolha_menu uma das opçoes abaixo:")
+    print("Escolha uma das opçoes abaixo:")
     print(
         "[1] cadastrar\n"
         "[2] listar\n"
@@ -60,36 +61,68 @@ def _menu():
         "[5] remover\n"
         "[6] Sair\n"
     )
-    # print("[2] listar")
-    # print("[3] buscar por IP")
-    # print("[4] atualizar status")
-    # print("[5] remover")
-    # print("[6] Sair")
 
-def _conexaoMongo():
+def _conexaoMongo(lista):
     '''
     Realiza conexao com o banco para criar coleção.
     '''
-    client = MongoClient("mongodb://localhost:27017/")
-    # Testa coenxão
-    client.admin.command("ping")
-    print("\nConectado ao MongoDB!")
-    sleep(0.5)
+    try:
+        client = MongoClient("mongodb://localhost:27017/")
+        # Testa conexão
+        client.admin.command("ping")
+        print("\nConectado ao MongoDB!")
+        sleep(0.5)
 
-    print("Preparando banco...")
-    db = client["seguranca"]
-    sleep(1)
+        print("Preparando banco...")
+        db = client["seguranca"]
+        sleep(1)
 
-    print("Criando coleção...\n")
-    ativos = db["ativos"]
+        print("Criando coleção...\n")
+        ativos = db["ativos"]
+    except Exception as e:
+        print("Falha na conexão com o banco: {}".format(e))
+    finally:
+        print("Preenchendo coleção...")
+        try:
+            ativos.insert_many(lista)
+        except Exception as e:
+            print("Falha na inserção: {}".format(e))
+    return ativos
+
+def _listadorDeAtivos(colecao):
+    '''
+    Realiza a consulta de todos os ativos.
+    '''
+    try:
+        for ativo in colecao.find({"ip": {"$exists": True}}):
+            print("Nome: {:<10} | IP: {}".format(ativo.get("nome"), ativo.get("ip")))
+    except Exception as e:
+        print("Falha na consulta multipla: {}".format(e))
 
 def _main():
-
     '''
     Função principal.
     '''
 
-    _conexaoMongo()
+    ativos = _conexaoMongo(lista_ativos)
+    # client = MongoClient("mongodb://localhost:27017/")
+    # # Testa coenxão
+    # client.admin.command("ping")
+    # print("\nConectado ao MongoDB!")
+    # sleep(0.5)
+
+    # print("Preparando banco...")
+    # db = client["seguranca"]
+    # sleep(1)
+
+    # print("Criando coleção...\n")
+    # ativos = db["ativos"]
+
+    # try:
+    #     ativos.insert_many(lista_ativos)
+    # except Exception as e:
+    #     print("Falha na inserção: {}".format(e))
+
     escolha_menu = 0
 
     while True:
@@ -102,10 +135,11 @@ def _main():
 
         if escolha_menu == "1":
             sleep(2)
-            print("Opção {} em construção!".format(escolha_menu))
         elif escolha_menu == "2":
+            print("Consultando ativos cadastrados...")
             sleep(2)
             print("Opção {} em construção!".format(escolha_menu))
+            _listadorDeAtivos(ativos)
         elif escolha_menu == "3":
             sleep(2)
             print("Opção {} em construção!".format(escolha_menu))
@@ -125,3 +159,7 @@ def _main():
             print("Opção inválida, faça uma sugestão ao dev!")
 
 _main()
+
+# !!!!!!!!!! Aera dev !!!!!!!!!!
+
+# ativos = _conexaoMongo(lista_ativos)
