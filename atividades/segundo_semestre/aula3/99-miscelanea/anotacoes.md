@@ -16,3 +16,5 @@
 7. Prestar atenção na ordem de envio de parâmetros para as queries, devem seguir, literalmente, a mesma ordem das mascaras.
 8. Criar uma função geral para fazer um `drop` de todas as tabelas do banco pode ser útil.
 9. Uma melhroia seria realizar a verificação do email cadastrado em cada uma das opções.
+10. Encontrar uma forma de realizar a inserção dos unusarios iniciais com uma tratativa mais refinada para emails duplicados.
+> **Chama laranja sugere:** Utilizar uma query contendo algo do tipo `INSERT INGNORE INTO...`
