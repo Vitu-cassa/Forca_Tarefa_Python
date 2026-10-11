@@ -14,4 +14,5 @@
 5. SQL obriga a usar `lista`, `tupla` ou `dicionario`, mesmo que o parâmetro de busca seja único, portanto, lembrar de "envelopar" o parâmetro em um dos três modelos.
 6. Ficar atendo com as quebras de linhas para as queries, elas devem conter cada espaço para separar as isntruções, uma boa prática é, em cada quebra de linha, no fim, adicionar um espaço.
 7. Prestar atenção na ordem de envio de parâmetros para as queries, devem seguir, literalmente, a mesma ordem das mascaras.
-8. 
+8. Criar uma função geral para fazer um `drop` de todas as tabelas do banco pode ser útil.
+9. Uma melhroia seria realizar a verificação do email cadastrado em cada uma das opções.
