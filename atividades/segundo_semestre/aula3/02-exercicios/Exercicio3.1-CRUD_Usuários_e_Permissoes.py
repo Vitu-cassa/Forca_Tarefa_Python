@@ -90,7 +90,7 @@ def _preenchedorInicial(conexao, cursor, lista):
     except Exception as e:
         print("Erro no preenchimento inicial: {}".format(e))
 
-def _criadoeDeTabela(conexao, cursor):
+def _criadorDeTabela(conexao, cursor):
     '''
     Cria a tabela de usuários.
     '''
@@ -166,7 +166,7 @@ def _buscadorDeUsuarios(conexao, cursor, busca):
         )
         for linha in cursor.fetchall():
             print(
-                "Usuário localizaso\n" \
+                "Usuário localizado\n" \
                 "{} -> nivel {}".format(linha["nome"],
                                         linha["nivel_acesso"]))
     except Exception as e:
@@ -186,7 +186,7 @@ def _atualizadorDeCampos(conexao, cursor, atualiza_nivel):
     except Exception as e:
         print("Atualização falhou: {}".format(e))
 
-def _removedorDeusUario(conexao, cursor, email_remover):
+def _removedorDeUsuario(conexao, cursor, email_remover):
     '''
     Deleta um usuario do banco
     '''
@@ -204,7 +204,7 @@ def _main():
     Função principal.
     '''
     conexao, cursor = _conectorSql()
-    _criadoeDeTabela(conexao, cursor)
+    _criadorDeTabela(conexao, cursor)
     _preenchedorInicial(conexao, cursor, usuarios)
     escolha_menu = 0
 
@@ -245,7 +245,7 @@ def _main():
         elif escolha_menu == "5":
             email_remover = input("Indique o email a ser removido: ")
             sleep(2)
-            _removedorDeusUario(conexao, cursor, email_remover)
+            _removedorDeUsuario(conexao, cursor, email_remover)
 
         elif escolha_menu == "6":
             print(
