@@ -34,6 +34,7 @@ lista_ativos = [
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 from pymongo import MongoClient
 from time import sleep
+from pymongo import errors
 
 def _apresentacao():
     '''
@@ -96,6 +97,10 @@ def _conexaoMongo():
         ativos = db["ativos"]
     except Exception as e:
         print("Falha na conexão com o banco: {}".format(e))
+    finally:
+        print("Indexando...")
+        sleep(2)
+        ativos.create_index("ip", unique = True)
     return ativos, db
 
 def _listadorDeAtivos(colecao):
@@ -122,6 +127,8 @@ def _cadastradorDeAtivos(colecao):
         res = colecao.insert_one(ativo)
         print(res.inserted_id)
 
+    except errors.DuplicateKeyError:
+        print("Ativo ja cadastrado!")
     except Exception as e:
         print("Falha na atualização da coleção: {}".format(e))
 
