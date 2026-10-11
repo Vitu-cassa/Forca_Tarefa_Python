@@ -6,5 +6,13 @@ Parece-me uma boa oportunidade de criar uma função mais robusta para conexão 
 1. Interface reciclada do exercicio 3 do CP2 do primeiro semestre.
 2. Ainda não descolei uma forma de fazer a conexão ao banco como uma função...
 3. O exercicio pode contar com um tratamento de erros personalizado, como a verificação de IPs inválidos.<br>
-3.1 Os IPs invalidos podem ser tratados com indexação, transferindo essa verificação para o banco.
+3.1 Os IPs invalidos podem ser tratados com `indexação`, transferindo essa verificação para o banco. 
+> **NOTA:** A indexação foi implementada logo após a criação da coleção. Interessante saber que posso fazer isso antes de populacionar o banco, o que é até obvio. Criar uma função separada para indexação pode ser uma opção.
+>
 4. Durante as requisições, deixo uma conexão aberta ao banco, enquanto a opção 6 não é escolhida, poderia garantir que cada opção feche a conexão, assim como evocar a fnução `_conexaoMongo()` em cada opção.
+
+---
+
+## Exercicio 2.2:
+1. Arquivo `auth.log` criado em `\99-miscelnaea`.
+2. 
