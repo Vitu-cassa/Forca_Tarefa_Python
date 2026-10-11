@@ -18,3 +18,7 @@
 9. Uma melhroia seria realizar a verificação do email cadastrado em cada uma das opções.
 10. Encontrar uma forma de realizar a inserção dos unusarios iniciais com uma tratativa mais refinada para emails duplicados.
 > **Chama laranja sugere:** Utilizar uma query contendo algo do tipo `INSERT INGNORE INTO...`
+> 
+11. Utilizar funções para fugir de "falsos sucessos"
+> **Chama laranja sugere:** Utilizar `cursor.rowcount` para verificar quantas linhas foram afetadas no `UPDATE` e `DELETE`.
+>
