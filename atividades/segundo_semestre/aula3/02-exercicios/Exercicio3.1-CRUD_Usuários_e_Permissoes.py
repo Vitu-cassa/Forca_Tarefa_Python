@@ -38,7 +38,7 @@ def _apresentacao():
     '''
     Cabeçalho do exercicio.
     '''
-    
+
     print()
     print("+----------------------------------------+")
     print("|  Gerenciador de Usuários e permissões  |")
@@ -83,7 +83,7 @@ def _preenchedorInicial(conexao, cursor, lista):
     '''
     try:
         cursor.executemany(
-            "INSERT INTO usuarios (nome, email, nivel_acesso)" \
+            "INSERT INTO usuarios (nome, email, nivel_acesso) " \
             "VALUES(%s,%s,%s)", lista
         )
         conexao.commit()
@@ -137,8 +137,41 @@ def _cadastradorDeUsuarios(conexao, cursor, usuario):
             "VALUES(%s,%s,%s)", usuario
         )
         conexao.commit()
+        print("Cadastro realizado!")
     except Exception as e:
         print("Cadastro não realizado: {}".format(e))
+
+def _buscadorDeUsuarios(conexao, cursor, busca):
+    '''
+    Função busca um usuário pelo campo de emial.
+    '''
+    cursor = conexao.cursor(dictionary=True)
+    try:
+        cursor.execute(
+            "SELECT nome, nivel_acesso FROM usuarios " \
+            "WHERE email = %s", (busca, )
+        )
+        for linha in cursor.fetchall():
+            print(
+                "Usuário localizaso\n" \
+                "{} -> nivel {}".format(linha["nome"],
+                                        linha["nivel_acesso"]))
+    except Exception as e:
+        print("Busca não realizada: {}".format(e))
+
+def _atualizadorDeCampos(conexao, cursor, atualiza_nivel):
+    '''
+    Funão Realiza a mudança do nivel de acesso de um usuario.
+    '''
+    try:
+        cursor.execute(
+            "UPDATE usuarios SET nivel_acesso = %s " \
+            "WHERE email = %s", atualiza_nivel
+        )
+        conexao.commit()
+        print("Nivel atualizado!")
+    except Exception as e:
+        print("Atualização falhou: {}".format(e))
 
 def _main():
     '''
@@ -171,12 +204,18 @@ def _main():
             _listadorDeUsuarios(conexao, cursor)
 
         elif escolha_menu == "3":
-            ip = input("Indique o IP do ativo: ")
-            print("Buscando ativo...")
+            busca = input("Indique o email do usuário: ")
+            print("Buscando usuário...")
             sleep(2)
+            _buscadorDeUsuarios(conexao, cursor, busca)
 
         elif escolha_menu == "4":
+            atualiza_nivel = []
+            print("Indique o novo nível de acesso e o email do usuário:")
+            for campo in ("novo nivel", "email"): 
+                atualiza_nivel.append(str(input("{}: ".format(campo))))
             sleep(2)
+            _atualizadorDeCampos(conexao, cursor, atualiza_nivel)
 
         elif escolha_menu == "5":
             sleep(2)
