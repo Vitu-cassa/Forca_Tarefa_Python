@@ -196,6 +196,7 @@ def _removedorDeAtivos(colecao):
 
         except Exception as e:
             print("Falha na atualização: {}".format(e))
+
 def _main():
     '''
     Função principal.
@@ -256,10 +257,3 @@ def _main():
             print("Opção inválida, faça uma sugestão ao dev!")
 
 _main()
-
-# !!!!!!!!!! Aera dev !!!!!!!!!!
-
-# ativos, banco = _conexaoMongo()
-# _criadorInicial(lista_ativos, ativos)
-
-# _listadorDeAtivos(ativos)
