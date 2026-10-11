@@ -108,6 +108,19 @@ def _criadoeDeTabela(conexao, cursor):
     except Exception as e:
         print("Tabela não criada: {}".format(e))
 
+def _deletadorDeTabela(conexao, cursor):
+    '''
+    Remove todas as tabelas do banco.
+    '''
+    try:
+        cursor.execute(
+            "DROP TABLE IF EXISTS usuarios"
+        )
+        conexao.commit()
+        print("Tabela apagada!")
+    except Exception as e:
+        print("Remoção falhou: {}".format(e))
+
 def _listadorDeUsuarios(conexao, cursor):
     '''
     Função consulta e retorna todos os dados dos usuários castrados.
@@ -173,11 +186,23 @@ def _atualizadorDeCampos(conexao, cursor, atualiza_nivel):
     except Exception as e:
         print("Atualização falhou: {}".format(e))
 
+def _removedorDeusUario(conexao, cursor, email_remover):
+    '''
+    Deleta um usuario do banco
+    '''
+    try:
+        cursor.execute(
+            "DELETE FROM usuarios WHERE email = %s", (email_remover, )
+        )
+        conexao.commit()
+        print("Usuario removido!")
+    except Exception as e:
+        print("Remoção fracassou: {}".format(e))
+
 def _main():
     '''
     Função principal.
     '''
-
     conexao, cursor = _conectorSql()
     _criadoeDeTabela(conexao, cursor)
     _preenchedorInicial(conexao, cursor, usuarios)
@@ -218,16 +243,19 @@ def _main():
             _atualizadorDeCampos(conexao, cursor, atualiza_nivel)
 
         elif escolha_menu == "5":
+            email_remover = input("Indique o email a ser removido: ")
             sleep(2)
+            _removedorDeusUario(conexao, cursor, email_remover)
 
         elif escolha_menu == "6":
             print(
                 "Opção {}\n"
-                "deseja deletar o banco? [S]im / [N]ão".format(escolha_menu))
+                "deseja deletar a tabela? [S]im / [N]ão".format(escolha_menu))
             apagar = input("Digite sua escolha: ")
             if apagar == "S":
+                print("Deletando tabela...")
                 sleep(2)
-                print("Deletando banco...")
+                _deletadorDeTabela(conexao, cursor)
 
             else:
                 print("Dados mantidos para novos testes.")
@@ -238,7 +266,3 @@ def _main():
             print("Opção inválida, faça uma sugestão ao dev!")
 
 _main()
-
-#!!!!!!!!!! Area dev !!!!!!!!!!
-# conexao, cursor = _conectorSql()
-# _criadoeDeTabela(conexao, cursor)
