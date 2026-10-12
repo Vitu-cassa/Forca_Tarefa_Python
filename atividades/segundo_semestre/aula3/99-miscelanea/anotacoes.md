@@ -22,3 +22,9 @@
 11. Utilizar funções para fugir de "falsos sucessos"
 > **Chama laranja sugere:** Utilizar `cursor.rowcount` para verificar quantas linhas foram afetadas no `UPDATE` e `DELETE`.
 >
+
+---
+
+## Exercicio 3.2:
+
+1. 
