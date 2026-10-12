@@ -27,4 +27,5 @@
 
 ## Exercicio 3.2:
 
-1. 
+1. Funções de criação de tabela reciclados do exercicios anterior.
+2. Por incrivel que pareça, é sempre estranho pra mim fazer esse teste, até porque ja viciei em colocar `%s` em tudo.
